@@ -12,7 +12,13 @@ exports.getComments = async( request, response) => {
 }
 
 exports.addComment = async ( request, response ) => {
-    response.send('we are here')
+    var object = {
+        "name": "Legal",
+        "email": "catalonia@gmail.com",
+        "subject": "alexa",
+        "message": "xega aint right"
+    };
+    response.send(object);
     // try {
     //     const comment = new Comment(request.body);
     //     return comment.save();
