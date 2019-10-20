@@ -37,29 +37,70 @@
 // }
 
 // start();
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var controller1 = require("./controllers/noteController");
 
+
+// var express = require('express');
+// var path = require('path');
+// var bodyParser = require('body-parser');
+// var mongoose = require('mongoose');
+// var controller1 = require("./controllers/noteController");
+
+// mongoose.connect("mongodb://localhost/dbase").then(
+//     () => console.log("Mongodb is connected")
+// );
+
+// var app = express();
+
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(express.static(path.resolve(__dirname, 'server')));
+
+// app.get('/', (req,res)=>{
+//     res.sendFile(path.join(__dirname, '../../', 'test.html'));
+// })
+
+// app.post('/post-feedback', controller1.create);
+
+// app.get('/view-feedbacks',  controller1.getAll);
+
+// app.listen(process.env.PORT || 4000, process.env.IP || '0.0.0.0' );
+
+
+//pagination
+const express = require("express");
+const bodyParser = require("body-parser")
+const mongoose = require("mongoose");
+const path = require("path");
+const mongoOp= require("./models/Note");
 mongoose.connect("mongodb://localhost/dbase").then(
     () => console.log("Mongodb is connected")
 );
-
-var app = express();
-
+const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.resolve(__dirname, 'server')));
+const router = express.Router();
 
-app.get('/', (req,res)=>{
+router.get('/', (req,res)=>{
     res.sendFile(path.join(__dirname, '../../', 'test.html'));
 })
 
-app.post('/post-feedback', controller1.create);
-
-app.get('/view-feedbacks',  function(req, res) {
-    res.send("all uni")
-});
-
-app.listen(process.env.PORT || 4000, process.env.IP || '0.0.0.0' );
+router.get("/allData", (req,res) => {
+    let response;
+    var pageNo = parseInt(req.query.pageNo);
+    var size = parseInt(req.query.size);
+    var query = {};
+    if(pageNo < 0 || pageNo === 0 ){
+        response = {"error": true, "message": "invalid"};
+        return res.send(response);
+    }
+    query.skip = size * (pageNo - 1 );
+    query.limit = size;
+    mongoOp.find({},{}, query, function(err,data){
+        if(err){
+            response = {"error": true,"message": "error fetching data"}
+        } else {
+            response = {"success": true,"message": data}
+        }
+        res.json(response)
+    })
+})
+app.use('/api', router);
+app.listen(4000);
