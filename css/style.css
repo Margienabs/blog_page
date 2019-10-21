@@ -3268,3 +3268,13 @@ tr.red {
 /*---------------------------------------------------- */
 
 /*# sourceMappingURL=style.css.map */
+.paging-container {
+  height:50px;
+  padding:10px;
+  padding-left:500px;
+}
+.page-links{
+  margin-right: 25px;
+  font-size: 14px;
+  color: red;
+}
