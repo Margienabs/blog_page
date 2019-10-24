@@ -50,7 +50,7 @@ $(function(){
                            '<div class="desc">' +
                                  '<h5><a href="#"> '+ val.name +'</a></h5>' +
                                  '<p class="date">' + months[dateStr.getMonth()] + ' ' + dateStr.getDate() + ',' + dateStr.getFullYear()  + ' at ' + dateStr.getHours() + ':' + minutes + '' + '</p>' +
-                                 '<p class="comment">' + val.name +
+                                 '<p class="comment">' + val.message +
                                  '</p>' +
                              '</div>' +
                          '</div>' +
