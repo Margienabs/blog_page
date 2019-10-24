@@ -2,22 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 userSchema = new Schema( {
-	name:  {
-        type: String,
-    	required:true
-    },
-	email: {
-        type: String,
-    	required:true
-    },
-	subject: {
-        type: String,
-    	required:true
-    },
-	message: {
-        type: String,
-    	required:true
-    },
+	name:  String,
+	email: String,
+	subject: String,
+	message: String,
 	create_date: {
         type: Date,
     	default: Date.now

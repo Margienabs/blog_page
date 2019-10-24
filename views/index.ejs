@@ -29,7 +29,6 @@
                     $("#subject").val("");
                     $("#message").val("");
                 }
-                const formdata = $("#form-post").serialize();
                 $(".submit_btn").on( 'click',function(e){
                     $.ajax({
                         type: 'POST',
@@ -42,9 +41,7 @@
                         },
                         dataType: "json",
                         success: function(response){
-                            //console.log(response);
                             clearInputs();
-                            //Show();
                         },
                             error: function() {}
                         })

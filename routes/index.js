@@ -48,7 +48,7 @@ router.post('/', function(req, res, next) {
       subject,
       message
     });  
-    
+    //res.json(user);
 
     user.save(function(err, Person){
       if(err)
@@ -58,37 +58,7 @@ router.post('/', function(req, res, next) {
     });
    res.json(user);
 
-  //  if(!personInfo.name || !personInfo.email || !personInfo.subject && !personInfo.message){
-  //   res.send();
-  // } else {
-
-  //   var c=1;
-  //   Comment.findOne({},function(err,data){
-     
-  //     if (data) {
-  //       console.log("if");
-  //        c = data.unique_id + 1;
-  //     }
-
-  //     var newPerson = new Comment({
-  //       unique_id:c,
-  //       name: personInfo.name,
-  //       email: personInfo.email,
-  //       subject: personInfo.subject,
-  //       message: personInfo.message
-  //     });
-
-  //     newPerson.save(function(err, Person){
-  //       if(err)
-  //         console.log(err);
-  //       else
-  //         console.log('Success');
-  //     });
-      
-  //   }).sort({_id: -1}).limit(1);
-
-  // }
-  // res.json({Success:'1'});
+  
 });
 
 router.get('/show', function(req, res, next) {
