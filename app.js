@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/db2', { useMongoClient: true });
+mongoose.connect('mongodb://localhost/db3', { useMongoClient: true });
 
 var app = express();
 

@@ -1,6 +1,6 @@
 $(function(){
     const api = "http://localhost:3000/results";
-    const size = 2;
+    const size = 5;
     let page = 1;
     
     fetch(api).then(function (response) {
