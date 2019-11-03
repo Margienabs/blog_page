@@ -6,6 +6,7 @@ userSchema = new Schema( {
 	email: String,
 	subject: String,
 	message: String,
+	hidden: String,
 	create_date: {
         type: Date,
     	default: Date.now

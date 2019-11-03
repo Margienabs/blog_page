@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userController = require('../controllers/userController.js')
-/* GET home page. */
+
 router.get('/', function(req, res, next) {
 	res.render('index', { title: 'Express' });
 });
@@ -41,15 +41,14 @@ router.get('/records', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-   const { name, email, subject, message } = req.body;
+   const { name, email, subject, message, hidden } = req.body;
    let user = new User({
       name,
       email,
       subject,
-      message
-    });  
-    //res.json(user);
-
+      message,
+      hidden
+    }); 
     user.save(function(err, Person){
       if(err)
         console.log(err);
@@ -62,7 +61,6 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/show', function(req, res, next) {
-  //res.json({ "data": "available"});
   Comment.find(function(err, response){
     res.json(response);
   });

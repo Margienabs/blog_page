@@ -21,15 +21,30 @@
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/responsive.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="js/pagination.js"></script>
         <script type="text/javascript">
             $(function(){
+                // $('#pagination-demo').twbsPagination({
+                //     totalPages: 16,
+                //     visiblePages: 6,
+                //     next: 'Next',
+                //     prev: 'Prev',
+                //     onPageClick: function (event, page) {
+                //         //fetch content and render here
+                //         $('#page-content').text('Page ' + page) + ' content here';
+                //     }
+                // });
+                
+
                 function clearInputs(){
                     $("#name").val("");
                     $("#email").val("");
                     $("#subject").val("");
                     $("#message").val("");
+                    $("input[type='hidden']").val("");
                 }
                 $(".submit_btn").on( 'click',function(e){
+                    var hidden = $("input[type='hidden']").val();
                     $.ajax({
                         type: 'POST',
                         url: '/',
@@ -37,11 +52,13 @@
                             "name": $("#name").val(),
                             "email": $("#email").val(),
                             "subject": $("#subject").val(),
-                            "message": $("#message").val()
+                            "message": $("#message").val(),
+                            "hidden": hidden
                         },
                         dataType: "json",
                         success: function(response){
                             clearInputs();
+                            location.reload();
                         },
                             error: function() {}
                         })
@@ -146,10 +163,16 @@
                         </div>
                         <div class="paging-container">
                                 <div class="paging"></div>
-                            </div>
+                        </div>
+                        <ul id="pagination-demo" class="pagination-sm">
+
+                        </ul>
+                        <div id="page-content" class="page-content">Page 1</div>
+
 						<div class="comment-form">
                             <h4>Leave a Reply</h4>
                             <form id="post-form">
+                                <input type="hidden" class="form-control" id="parentId" name="parentId" />
                                 <div class="form-group form-inline">
                                   <div class="form-group col-lg-6 col-md-6 name">
                                     <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Name'">

@@ -1,6 +1,6 @@
 $(function(){
     const api = "http://localhost:3000/results";
-    const size = 5;
+    const size = 12;
     let page = 1;
     
     fetch(api).then(function (response) {
@@ -8,15 +8,18 @@ $(function(){
         }).then(function (json) {
             const { data: { message, success } } =  json;
             let noRecords = message.length;
+            console.log(noRecords);
             if(success){
                 for(let i=0;  i < noRecords; i++){
                     let id = i + 1;
                     $("<a class='page-links' data-id="+id+">").attr("href","#").text(id).appendTo(".paging");
                 }
                 callGetCommentsApi(true);
-                getPaginatedData();
+                getPaginatedData(); 
             }
         });
+        replyToThisComment();
+        
         
         function getPaginatedData(){
             $(document).on("click", ".page-links", function(e){
@@ -38,10 +41,17 @@ $(function(){
                 const { data: { message } } = response;
                  let html = '';
                  let contentArea = $(".comments-area").empty();
-                 $.each(message, function(prop, val) {
+                 let hiddens = [];
+                 $.each(message, function(index, val) {
                      let dateStr = new Date(val.create_date);
+                     if(!(typeof val.hidden === "undefined")){
+                         if(!(val.hidden == "")){
+                             hiddens.push(val.hidden);
+                         }
+                     }
+
                      let minutes = dateStr.getMinutes() < 10 ? '0'+dateStr.getMinutes()  : dateStr.getMinutes();
-                     html +='<div class="comment-list">' +
+                     html +='<div class="comment-list" data-parent="'+ val._id +'">' +
                            '<div class="single-comment justify-content-between d-flex">' +
                            '<div class="user justify-content-between d-flex">' +
                            '<div class="thumb">' +
@@ -55,13 +65,53 @@ $(function(){
                              '</div>' +
                          '</div>' +
                          '<div class="reply-btn">' +
-                         '<a href="" class="btn-reply text-uppercase">reply</a>' +
+                         '<a href="#" class="btn-reply text-uppercase" data-hidden="' + val.hidden + '" data-identifier="' + val._id + '">reply</a>' +
                          '</div>' +
                      '</div>' +
                      '</div>';
                  });
                  contentArea.html(html);
+                 let nestedPost;
+                 let allParents = contentArea.find('.comment-list');
+                 $.each( allParents, function(index,value){
+                    let parent = $(this);
+                    let parentId = $(this).attr('data-parent');
+                    $.each( hiddens, function(index,val){
+                        if( val === parentId){
+                            nestedPost = contentArea.find('[data-hidden="' + val +'"]').parents('div.comment-list');
+                            nestedPost.addClass("left-padding");
+                            nestedPost.find("a.btn-reply").remove();
+                            nestedPost.appendTo(parent);
+                        }
+                    })
+
+                 })
+
+                //  hiddens.forEach( value => {
+                //     if(!(typeof value === "undefined" || value === "")){
+                //         nestedPost = contentArea.find('[data-hidden="' + value +'"]').parents('div.comment-list');
+                //         allParents = contentArea.find('.comment-list');
+                //         console.log(allParents);
+                        
+                    
+                        
+                //     }
+                //  })
+                 // nestedPost.addClass("left-padding");
+                // nestedPost.find("a.btn-reply").remove();
+                // $(nestedPost).insertAfter(nestedParent);
          })
+        }
+
+        function replyToThisComment(){
+            $(document).on("click", ".btn-reply",function(e){
+                e.preventDefault();
+                parentId = $(this).attr("data-identifier");
+                $("input[type='hidden']").val(parentId);
+                window.scrollTo(0, 800);
+            })
+            
+            //console.log($(document).find(".comment-list"));
         }
 });
 
