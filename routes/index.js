@@ -31,14 +31,38 @@ router.get('/results', function(req,res,next){
 })
 
 router.get('/records', function(req, res, next) {
- return User.find( function( err, clients ) {
+ return User.find( function( err, results ) {
   if( !err ) {
-        res.json(clients);
+        res.json(results);
       } else {
         return console.log( err );
       }                             
   });
 });
+
+router.get('/getCount', function(req,res){
+  User.find().where('hidden').equals('').exec(function(err,records){
+    if(!err){
+      res.json(records);
+    } else {
+      return console.log(err);
+    }
+  })
+})
+
+router.post('/search', function(req,res,next){
+  let searchTerm = req.body.searchTerm;
+  let searchExp = new RegExp(searchTerm, 'i')
+
+  User.find({ subject: searchExp}, function(err, records){
+    if(!err){
+      res.json(records);
+    }
+    else {
+      return console.log(err)
+    }
+  })
+})
 
 router.post('/', function(req, res, next) {
    const { name, email, subject, message, hidden } = req.body;
